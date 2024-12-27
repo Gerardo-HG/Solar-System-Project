@@ -1,0 +1,167 @@
+<!DOCTYPE html>  
+<html lang="en">  
+
+<head>  
+    <title>Solar System: Document Object Model</title>  
+    <style>  
+        body {  
+            background-image: url('https://media.giphy.com/media/3og0IFrHkIglEOg8Ba/giphy.gif');  
+            background-size: cover;  
+            background-repeat: no-repeat;  
+            background-attachment: fixed;  
+            height: 100vh;  
+            margin: 0;  
+            display: flex;  
+            flex-direction: column;  
+            justify-content: center;  
+            align-items: center;  
+            color: white;  
+            font-family: Verdana, Geneva, Tahoma, sans-serif;  
+        }  
+
+        h1 {  
+            font-size: 40px;  
+            margin-bottom: 20px;  
+        }  
+
+        .top-h {  
+            display: flex;  
+            justify-content: center;  
+            gap: 10px;  
+            margin-bottom: 20px;  
+        }  
+
+        input, select, button {  
+            padding: 10px;  
+            font-size: 16px;  
+            border-radius: 5px;  
+            border: none;  
+        }  
+
+        input, select {  
+            width: 150px;  
+        }  
+
+        button {  
+            background-color: gray;  
+            color: white;  
+            cursor: pointer;  
+        }  
+
+        #result {  
+            display: none;  
+            background-color: rgba(255, 255, 255, 0.1);  
+            padding: 20px;  
+            border-radius: 10px;  
+            text-align: center;  
+            margin-top: 20px;  
+        }  
+
+        #result p {  
+            font-size: 24px;  
+            margin: 10px 0;  
+        }  
+
+        #errorMessage {  
+            color: red;  
+        }  
+
+        img {  
+            width: 150px;  
+            height: 150px;  
+            border-radius: 50%;  
+            margin-top: 20px;  
+        }  
+    </style>  
+</head>  
+
+<body>  
+    <header>  
+        <h1>Calculate Weight on a Planet</h1>  
+        <div class="top-h">  
+            <input type="text" id="mass" placeholder="Mass in Kilogram" />  
+            <select id="planetSelected">  
+                <option value="none">--Select Planet--</option>  
+                <option value="mercury">Mercury</option>  
+                <option value="venus">Venus</option>  
+                <option value="earth">Earth</option>  
+                <option value="moon">Moon</option>  
+                <option value="mars">Mars</option>  
+                <option value="jupiter">Jupiter</option>  
+                <option value="saturn">Saturn</option>  
+                <option value="uranus">Uranus</option>  
+                <option value="neptune">Neptune</option>  
+                <option value="pluto">Pluto</option>  
+            </select>  
+            <button id="cal-wei">Calculate weight</button>  
+        </div>  
+    </header>  
+    <main>  
+        <div id="result">  
+            <p id="errorMessage" style="display: none;"></p>  
+            <p id="weightText"></p>  
+            <img id="planetImage" style="display: none;" alt="Planet Image" />  
+        </div>  
+    </main>  
+    <script>  
+        const input = document.querySelector('#mass');  
+        const button = document.getElementById('cal-wei');  
+        const errorMessage = document.querySelector('#errorMessage');  
+        const planetSelect = document.querySelector('#planetSelected');  
+        const resultDiv = document.getElementById('result');  
+        const weightText = document.getElementById('weightText');  
+        const planetImage = document.getElementById('planetImage');  
+
+        button.addEventListener('click', () => {  
+            errorMessage.style.display = 'none';  
+            resultDiv.style.display = 'none';  
+            weightText.textContent = '';  
+            planetImage.style.display = 'none';  
+
+            let mass = input.value.trim();  
+            let selectedPlanet = planetSelect.value;  
+
+            const gravity = {  
+                mercury: 3.7,  
+                venus: 8.87,  
+                earth: 9.8,  
+                moon: 1.62,  
+                mars: 3.71,  
+                jupiter: 24.79,  
+                saturn: 10.44,  
+                uranus: 8.69,  
+                neptune: 11.15,  
+                pluto: 0.62,  
+            };  
+
+            if (mass === '') {  
+                errorMessage.style.display = 'block';  
+                errorMessage.textContent = 'Mass is required';  
+                return;  
+            }  
+
+            if (isNaN(mass)) {  
+                errorMessage.style.display = 'block';  
+                errorMessage.textContent = 'Input must be a number';  
+                return;  
+            }  
+
+            if (selectedPlanet === 'none') {  
+                errorMessage.style.display = 'block';  
+                errorMessage.textContent = 'Please select a planet';  
+                return;  
+            }  
+
+            mass = parseFloat(mass);  
+            const weight = (mass * gravity[selectedPlanet]).toFixed(2);  
+
+            weightText.textContent = `The weight of the object on ${selectedPlanet.toUpperCase()} is ${weight} N.`;  
+            planetImage.src = `public/images/${selectedPlanet}.jpg`; 
+            planetImage.alt = `${selectedPlanet} image`;  
+            planetImage.style.display = 'block';  
+            resultDiv.style.display = 'block';  
+        });  
+    </script>  
+</body>  
+
+</html>
